@@ -69,6 +69,18 @@ function Decoder(bytes, fport) {
 	} else if ((bytes[1] === 0x4D) && (bytes[2] === 0x01)) { // device type 4D (R312A), report type 01
 	    decoded.battery = bytes[3]/10
 	    decoded.alarm = bytes[4]
+	} else if ((bytes[1] === 0x04) && (bytes[2] === 0x01)) { // device type 04 (R311G), report type 01
+	    decoded.battery = bytes[3]/10
+	    decoded.illuminance = (bytes[4] << 8) | bytes[5]
+	} else if ((bytes[1] === 0x1D) && (bytes[2] === 0x01)) { // device type 1D (R718F), report type 01
+	    decoded.battery = bytes[3]/10
+	    decoded.contact = bytes[4]
+	} else if ((bytes[1] === 0x4F) && (bytes[2] === 0x01)) { // device type 4F (R311FA), report type 01
+	    decoded.battery = bytes[3]/10
+	    decoded.activity = bytes[4]
+	} else if ((bytes[1] === 0x12) && (bytes[2] === 0x01)) { // device type 12 (R718WB), report type 01
+	    decoded.battery = bytes[3]/10
+	    decoded.leak = bytes[4]
 	}
     } else if (fport === 7) { // then its a ConfigureCmd response
     	if ((bytes[0] === 0x82) && (bytes[1] === 0x01)) { // R711 or R712
