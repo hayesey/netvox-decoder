@@ -52,36 +52,39 @@ function Decoder(bytes, fport) {
             // the rest of the message is 0xff for other sensor types
         } else if ((bytes[1] === 0x05) && (bytes[2] === 0x0C)) { // device R72615A, temp & humidity report
             decoded.battery = bytes[3]/10
-	    decoded.temperature = ((bytes[4] << 24 >> 16) + bytes[5])/100
+	    	decoded.temperature = ((bytes[4] << 24 >> 16) + bytes[5])/100
             decoded.humidity = ((bytes[6] << 8) + bytes[7])/100
             // the rest of the message is 0xff for other sensor types
         } else if ((bytes[1] === 0x1B) && (bytes[2] === 0x01)) { // device R718DB and report 01
             decoded.battery = bytes[3]/10
             decoded.vibration = bytes[4]
         } else if ((bytes[1] === 0x49) && (bytes[2] === 0x01)) { // device type 49 (R718N1) and report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.currentma = ((bytes[4] << 8) + bytes[5])
-	    decoded.multiplier = bytes[6]
-	    decoded.realcurrentma = decoded.currentma * decoded.multiplier
-	} else if ((bytes[1] === 0x32) && (bytes[2] === 0x01)) { // device type 32 (R718WA), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.waterleak = bytes[4]
-	} else if ((bytes[1] === 0x4D) && (bytes[2] === 0x01)) { // device type 4D (R312A), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.alarm = bytes[4]
-	} else if ((bytes[1] === 0x04) && (bytes[2] === 0x01)) { // device type 04 (R311G), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.illuminance = (bytes[4] << 8) | bytes[5]
-	} else if ((bytes[1] === 0x1D) && (bytes[2] === 0x01)) { // device type 1D (R718F), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.contact = bytes[4]
-	} else if ((bytes[1] === 0x4F) && (bytes[2] === 0x01)) { // device type 4F (R311FA), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.activity = bytes[4]
-	} else if ((bytes[1] === 0x12) && (bytes[2] === 0x01)) { // device type 12 (R718WB), report type 01
-	    decoded.battery = bytes[3]/10
-	    decoded.leak = bytes[4]
-	}
+	    	decoded.battery = bytes[3]/10
+	    	decoded.currentma = ((bytes[4] << 8) + bytes[5])
+	    	decoded.multiplier = bytes[6]
+	    	decoded.realcurrentma = decoded.currentma * decoded.multiplier
+		} else if ((bytes[1] === 0x32) && (bytes[2] === 0x01)) { // device type 32 (R718WA), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.waterleak = bytes[4]
+		} else if ((bytes[1] === 0x4D) && (bytes[2] === 0x01)) { // device type 4D (R312A), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.alarm = bytes[4]
+		} else if ((bytes[1] === 0x04) && (bytes[2] === 0x01)) { // device type 04 (R311G), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.illuminance = (bytes[4] << 8) | bytes[5]
+		} else if ((bytes[1] === 0x1D) && (bytes[2] === 0x01)) { // device type 1D (R718F), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.contact = bytes[4]
+		} else if ((bytes[1] === 0x4F) && (bytes[2] === 0x01)) { // device type 4F (R311FA), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.activity = bytes[4]
+		} else if ((bytes[1] === 0x12) && (bytes[2] === 0x01)) { // device type 12 (R718WB), report type 01
+	    	decoded.battery = bytes[3]/10
+	    	decoded.leak = bytes[4]
+		} else if ((bytes[1] === 0x9F) && (bytes[2] === 0x01)) { // device type 9F (R718VA/VB), report type 01
+	    	decoded.battery = bytes[3]/10
+			decoded.status = bytes[4]
+		}
     } else if (fport === 7) { // then its a ConfigureCmd response
     	if ((bytes[0] === 0x82) && (bytes[1] === 0x01)) { // R711 or R712
       	    decoded.mintime = ((bytes[2] << 8) + bytes[3])
