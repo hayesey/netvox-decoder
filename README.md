@@ -2,13 +2,12 @@
 
 This is a simple payload decoder example for some of the Netvox range of LoRaWAN sensors.
 
-It is designed for use with TheThingsNetwork but can easily be adapted for use with Chirpstack (instructions to follow).
+It can be used with The Things Network v2 (TTN), Chirpstack and Node.js command line.
 
 **Note:** this is designed for testing purposes only, I take no responsibility for anyone using this getting missing or incorrect data!
 
-If I ever find the time I will re-write in a more structured fashion rather than a chain of "if" statements.
 
-## The Things Network Instructions
+## The Things Network V2 Instructions
 
 Simply copy and paste the code from decoder.js into the Payload Formats tab in your TTN application. Into the decoder box, replacing anything already in there.
 
@@ -17,7 +16,15 @@ Simply copy and paste the code from decoder.js into the Payload Formats tab in y
 1. Create a device profile for Netvox sensors if you don't already have one. Choose LoRaWAN MAC version 1.0.1.
 1. In the codec tab, select "Custom JavaScript codec functions".
 1. Copy and paste the code from decoder.js into the upper text box, replacing anything that was already in there.
-1. Change the "Decoder" function name to "Decode".
-1. Swap this function's parameters around. So instead of "(bytes, fport)" you have "(fport, bytes)".
+
+## Node.js Command Line Instructions
+
+Prerequisite: you need to have Node.js installed on your computer. Consult the Node.js website for install instructions.
+
+Run the following command (whilst in the same folder as the decoder.js file):
+
+```node decoder.js 0101011f07aa1176000000```
+
+Replace the example payload shown there with your real one (case doesn't matter).
 
 Paul Hayes - paul@alliot.co.uk
