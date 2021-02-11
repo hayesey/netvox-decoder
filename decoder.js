@@ -91,6 +91,20 @@ function Decoder(bytes, fport) {
 			decoded.battery = bytes[3] / 10;
 			decoded.adcrawvalue1 = (bytes[4] << 8) | bytes[5];
 			decoded.adcrawvalue2 = (bytes[6] << 8) | bytes[7];
+		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x0A)) { // device type 05 (RA07 series), report type 0A
+			decoded.battery = bytes[3] / 10;
+			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
+				decoded.soilvwc = (bytes[4] << 8) | bytes[5];
+			}
+			if (bytes[6] != 0xFF && bytes[7] != 0xFF) {
+				decoded.soiltemperature = (bytes[6] << 8) | bytes[7];
+			}
+			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
+				decoded.waterlevel = (bytes[8] << 8) | bytes[9];
+			}
+			if (bytes[10] != 0xFF) {
+				decoded.ec = bytes[10];
+			}
 		}
 	} else if (fport === 7) { // then its a ConfigureCmd response
 		if ((bytes[0] === 0x82) && (bytes[1] === 0x01)) { // R711 or R712
