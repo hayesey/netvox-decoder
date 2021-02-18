@@ -91,7 +91,7 @@ function Decoder(bytes, fport) {
 			decoded.battery = bytes[3] / 10;
 			decoded.adcrawvalue1 = (bytes[4] << 8) | bytes[5];
 			decoded.adcrawvalue2 = (bytes[6] << 8) | bytes[7];
-		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x0A)) { // device type 05 (RA07 series), report type 0A
+		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x0A)) { // device type 05 (RA07 series), water level/soil moisture
 			decoded.battery = bytes[3] / 10;
 			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
 				decoded.soilvwc = (bytes[4] << 8) | bytes[5];
@@ -104,6 +104,28 @@ function Decoder(bytes, fport) {
 			}
 			if (bytes[10] != 0xFF) {
 				decoded.ec = bytes[10];
+			}
+		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x08)) { // device type 05 (RA07 series), ph sensor
+			decoded.battery = bytes[3] / 10;
+			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
+				decoded.ph = ((bytes[4] << 8) | bytes[5])*100;
+			}
+			if (bytes[6] != 0xFF && bytes[7] != 0xFF) {
+				decoded.temperature = ((bytes[6] << 8) | bytes[7])*100;
+			}
+			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
+				decoded.orp = (bytes[8] << 8) | bytes[9];
+			}
+		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x09)) { // device type 05 (RA07 series), turbidity sensor
+			decoded.battery = bytes[3] / 10;
+			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
+				decoded.ntu = ((bytes[4] << 8) | bytes[5])*10;
+			}
+			if (bytes[6] != 0xFF && bytes[7] != 0xFF) {
+				decoded.temperature = ((bytes[6] << 8) | bytes[7])*100;
+			}
+			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
+				decoded.soilhumidity = ((bytes[8] << 8) | bytes[9])*100;
 			}
 		}
 	} else if (fport === 7) { // then its a ConfigureCmd response
