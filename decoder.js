@@ -160,4 +160,7 @@ function Decode(fPort, bytes) {
 }
 
 // Direct node.js CLU wrapper (payload bytestring as argument)
-console.log(Decoder(Buffer.from(process.argv[2], 'hex'), 6));
+try {
+    console.log(Decoder(Buffer.from(process.argv[2], 'hex'), 6));
+} catch(err) {}
+
