@@ -108,10 +108,10 @@ function Decoder(bytes, fport) {
 		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x08)) { // device type 05 (RA07 series), ph sensor
 			decoded.battery = bytes[3] / 10;
 			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
-				decoded.ph = ((bytes[4] << 8) | bytes[5])*100;
+				decoded.ph = ((bytes[4] << 8) | bytes[5])/100;
 			}
 			if (bytes[6] != 0xFF && bytes[7] != 0xFF) {
-				decoded.temperature = ((bytes[6] << 8) | bytes[7])*100;
+				decoded.temperature = ((bytes[6] << 8) | bytes[7])/100;
 			}
 			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
 				decoded.orp = (bytes[8] << 8) | bytes[9];
@@ -119,13 +119,13 @@ function Decoder(bytes, fport) {
 		} else if ((bytes[1] === 0x05) && (bytes[2] === 0x09)) { // device type 05 (RA07 series), turbidity sensor
 			decoded.battery = bytes[3] / 10;
 			if (bytes[4] != 0xFF && bytes[5] != 0xFF) {
-				decoded.ntu = ((bytes[4] << 8) | bytes[5])*10;
+				decoded.ntu = ((bytes[4] << 8) | bytes[5])/10;
 			}
 			if (bytes[6] != 0xFF && bytes[7] != 0xFF) {
-				decoded.temperature = ((bytes[6] << 8) | bytes[7])*100;
+				decoded.temperature = ((bytes[6] << 8) | bytes[7])/100;
 			}
 			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
-				decoded.soilhumidity = ((bytes[8] << 8) | bytes[9])*100;
+				decoded.soilhumidity = ((bytes[8] << 8) | bytes[9])/100;
 			}
 		}
 	} else if (fport === 7) { // then its a ConfigureCmd response
