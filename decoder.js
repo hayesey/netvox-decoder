@@ -63,6 +63,30 @@ function Decoder(bytes, fport) {
 			decoded.currentma = ((bytes[4] << 8) + bytes[5]);
 			decoded.multiplier = bytes[6];
 			decoded.realcurrentma = decoded.currentma * decoded.multiplier;
+		} else if ((bytes[1] === 0x4A) && (bytes[2] === 0x01)) { // device type 4A (R718N3) and report type 01
+			// full data is split over two separate uplink messages
+			decoded.battery = bytes[3] / 10;
+			decoded.currentma1 = ((bytes[4] << 8) + bytes[5]);
+			decoded.currentma2 = ((bytes[6] << 8) + bytes[7]);
+			decoded.currentma3 = ((bytes[8] << 8) + bytes[9]);
+			decoded.multiplier1 = bytes[10];
+		} else if ((bytes[1] === 0x4A) && (bytes[2] === 0x02)) { // device type 4A (R718N3) and report type 02
+			// full data is split over two separate uplink messages
+			decoded.battery = bytes[3] / 10;
+			decoded.multiplier2 = bytes[4];
+			decoded.multiplier3 = bytes[5];
+		} else if ((bytes[1] === 0x1C) && (bytes[2] === 0x01)) { // device type 1C (R718E) and report type 01
+			// full data is split over two separate uplink messages
+			decoded.battery = bytes[3] / 10;
+			decoded.accelerationx = ((bytes[4] << 8) + bytes[5]);
+			decoded.accelerationy = ((bytes[6] << 8) + bytes[7]);
+			decoded.accelerationz = ((bytes[8] << 8) + bytes[9]);
+		} else if ((bytes[1] === 0x1C) && (bytes[2] === 0x02)) { // device type 1C (R718E) and report type 02
+			// full data is split over two separate uplink messages
+			decoded.velocityx = ((bytes[3] << 8) + bytes[4]);
+			decoded.velocityy = ((bytes[5] << 8) + bytes[6]);
+			decoded.velocityz = ((bytes[7] << 8) + bytes[8]);
+			decoded.temperature = ((bytes[9] << 24 >> 16) + bytes[10]);
 		} else if ((bytes[1] === 0x32) && (bytes[2] === 0x01)) { // device type 32 (R718WA), report type 01
 			decoded.battery = bytes[3] / 10;
 			decoded.waterleak = bytes[4];
