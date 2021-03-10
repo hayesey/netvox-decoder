@@ -78,14 +78,14 @@ function Decoder(bytes, fport) {
 		} else if ((bytes[1] === 0x1C) && (bytes[2] === 0x01)) { // device type 1C (R718E) and report type 01
 			// full data is split over two separate uplink messages
 			decoded.battery = bytes[3] / 10;
-			decoded.accelerationx = ((bytes[4] << 8) + bytes[5]);
-			decoded.accelerationy = ((bytes[6] << 8) + bytes[7]);
-			decoded.accelerationz = ((bytes[8] << 8) + bytes[9]);
+			decoded.accelerationx = bytestofloat16((bytes[5] << 8) + bytes[4]);
+			decoded.accelerationy = bytestofloat16((bytes[7] << 8) + bytes[6]);
+			decoded.accelerationz = bytestofloat16((bytes[9] << 8) + bytes[8]);
 		} else if ((bytes[1] === 0x1C) && (bytes[2] === 0x02)) { // device type 1C (R718E) and report type 02
 			// full data is split over two separate uplink messages
-			decoded.velocityx = ((bytes[3] << 8) + bytes[4]);
-			decoded.velocityy = ((bytes[5] << 8) + bytes[6]);
-			decoded.velocityz = ((bytes[7] << 8) + bytes[8]);
+			decoded.velocityx = bytestofloat16((bytes[4] << 8) + bytes[3]);
+			decoded.velocityy = bytestofloat16((bytes[6] << 8) + bytes[5]);
+			decoded.velocityz = bytestofloat16((bytes[8] << 8) + bytes[7]);
 			decoded.temperature = ((bytes[9] << 24 >> 16) + bytes[10]);
 		} else if ((bytes[1] === 0x32) && (bytes[2] === 0x01)) { // device type 32 (R718WA), report type 01
 			decoded.battery = bytes[3] / 10;
@@ -176,6 +176,23 @@ function bcdtonumber(bytes) {
 		m *= 100;
 	}
 	return num;
+}
+
+function bytestofloat16(bytes) {
+    var sign = (bytes & 0x8000) ? -1 : 1;
+    var exponent = ((bytes >> 7) & 0xFF) - 127;
+    var significand = (bytes & ~(-1 << 7));
+
+    if (exponent == 128) 
+        return 0.0;
+
+    if (exponent == -127) {
+        if (significand == 0) return sign * 0.0;
+        exponent = -126;
+        significand /= (1 << 6);
+    } else significand = (significand | (1 << 7)) / (1 << 7);
+
+    return sign * significand * Math.pow(2, exponent);
 }
 
 // Chirpstack decoder wrapper
