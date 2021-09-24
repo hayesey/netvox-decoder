@@ -151,11 +151,18 @@ function Decoder(bytes, fport) {
 			if (bytes[8] != 0xFF && bytes[9] != 0xFF) {
 				decoded.soilhumidity = ((bytes[8] << 8) | bytes[9])/100;
 			}
-		} else if ((bytes[1] === 0x5A) && (bytes[2] === 0x01)) { // device type 01 (R311WA/R313WA)
+		} else if ((bytes[1] === 0x5A) && (bytes[2] === 0x01)) { // device type 5A (R311WA/R313WA)
 			decoded.battery = bytes[3] / 10;
 			decoded.status1 = bytes[4];
 			decoded.status2 = bytes[5];
-  	}
+	  	} else if ((bytes[1] === 0x22) && (bytes[2] === 0x01)) { // device type 22 (R718KA)
+			decoded.battery = bytes[3] / 10;
+			decoded.current = bytes[4];
+			decoded.finecurrent = bytes[5];
+		} else if ((bytes[1] === 0x25) && (bytes[2] === 0x01)) { // device type 25 (R718LB)
+			decoded.battery = bytes[3] / 10;
+			decoded.status = bytes[4];
+		}
 	} else if (fport === 7) { // then its a ConfigureCmd response
 		if ((bytes[0] === 0x82) && (bytes[1] === 0x01)) { // R711 or R712
 			decoded.mintime = ((bytes[2] << 8) + bytes[3]);
